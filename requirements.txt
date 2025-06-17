@@ -1,0 +1,4 @@
+snowflake-cli-labs
+snowflake
+snowflake-snowpark-python==1.5.0
+snowflake-connector-python
