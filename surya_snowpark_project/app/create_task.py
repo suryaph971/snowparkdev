@@ -59,7 +59,7 @@ with DAG("my_dag",schedule=timedelta(days=1)) as dag:
 def task_branch_condition(session:Session) -> str:
     return "dag_task3"
 
-with DAG("my_dag_task_branch",stage_location='@dev_deployment',schedule=timedelta(days=1)) as dag:
+with DAG("my_dag_task_branch",stage_location='@Practice_db.public.dev_deployment',use_func_return_value=True,schedule=timedelta(days=1)) as dag:
     dag_task1 = DAGTask("dag_task1",
                         definition="Select current_timestamp() as timestamp",
                         warehouse="COMPUTE_WH")
@@ -76,7 +76,7 @@ with DAG("my_dag_task_branch",stage_location='@dev_deployment',schedule=timedelt
                         warehouse="COMPUTE_WH")
 
 
-    dag_task_branch = DAGTaskBranch("dag_task_branch", task_branch_condition,warehouse="COMPUTE_WH",schema="Public")
+    dag_task_branch = DAGTaskBranch("dag_task_branch", task_branch_condition,warehouse="COMPUTE_WH")
 
     dag_task1 >> dag_task2 >> dag_task_branch
     dag_task_branch >> [dag_task3, dag_task4]
