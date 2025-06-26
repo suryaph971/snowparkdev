@@ -55,32 +55,3 @@ with DAG("my_dag",schedule=timedelta(days=1)) as dag:
     dag_op = DAGOperation(schema)
     dag_op.deploy(dag, mode=CreateMode.or_replace)
     print("DAG Created Successfully")
-
-def task_branch_condition(session:Session) -> str:
-    return "dag_task3"
-
-with DAG("my_dag_task_branch",stage_location='@dev_deployment',use_func_return_value=True,schedule=timedelta(days=1)) as dag:
-    dag_task1 = DAGTask("dag_task1",
-                        definition="Select current_timestamp() as timestamp",
-                        warehouse="COMPUTE_WH")
-    dag_task2 = DAGTask("dag_task2",
-                        definition="Select current_timestamp() as timestamp",
-                        warehouse="COMPUTE_WH")
-
-    dag_task3 = DAGTask("dag_task3",
-                        definition="Select current_timestamp() as timestamp",
-                        warehouse="COMPUTE_WH")
-
-    dag_task4 = DAGTask("dag_task4",
-                        definition="Select current_timestamp() as timestamp",
-                        warehouse="COMPUTE_WH")
-
-
-    dag_task_branch = DAGTaskBranch("dag_task_branch", task_branch_condition,warehouse="COMPUTE_WH")
-
-    dag_task1 >> dag_task2 >> dag_task_branch
-    dag_task_branch >> [dag_task3, dag_task4]
-    schema = root.databases["Practice_db"].schemas["Public"]
-    dag_op = DAGOperation(schema)
-    dag_op.deploy(dag, mode=CreateMode.or_replace)
-    print("DAG Created Successfully")
