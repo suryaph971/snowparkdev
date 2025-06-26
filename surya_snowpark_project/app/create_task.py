@@ -59,7 +59,7 @@ with DAG("my_dag",schedule=timedelta(days=1)) as dag:
 def task_branch_condition(session:Session) -> str:
     return "dag_task3"
 
-with DAG("my_dag_task_branch",schema=schema,stage_location='@dev_deployment',schedule=timedelta(days=1)) as dag:
+with DAG("my_dag_task_branch",stage_location='@PUBLIC.dev_deployment',schedule=timedelta(days=1)) as dag:
     dag_task1 = DAGTask("dag_task1",
                         definition="Select current_timestamp() as timestamp",
                         warehouse="COMPUTE_WH")
